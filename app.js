@@ -16,9 +16,9 @@ app.get('/get_holes', (req, res) => {
 
 app.get('/get_holesD', (req, res) => { 
 
-  console.log(req.query.place_id)
+  console.log(req.query.hole_id)
 
-  dba.GetHolesD(req.query.place_id).then(holesD => {
+  dba.GetHolesD(req.query.hole_id).then(holesD => {
     console.log(holesD);
     res.send(holesD)
   })
