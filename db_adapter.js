@@ -43,11 +43,10 @@ module.exports = {
       }
     },
 
-    GetHolesD: async function (n_id) {
-      //   var query = `select register_new_user(\'${login}\', \'${pass}\');`;  
+    GetHoleDepths: async function (hole_id, hole_depth_id) {
   
-        var query = ` select * from "geoapp_holeD" as hd where hd.n_id = ${n_id} `
-  
+        var query = ` select * from get_hole_depths(${hole_id}, ${hole_depth_id}) `    
+          
         console.log(query);
         try {
           const res = await pool.query(
@@ -64,5 +63,62 @@ module.exports = {
         }
       },
 
-  
+    SaveHoleDepth: async function (hole_id, hole_depth_id,  depth_, description_) {
+
+        var query = ` select * from save_hole_depth(${hole_id}, ${hole_depth_id},  ${depth_}, '${description_}') `    
+          
+        console.log(query);
+        try {
+          const res = await pool.query(
+            query,
+            []
+          );
+          console.log('db_a: ' + res);
+          return res.rows;
+          // console.log(res.rows[0].register_new_user);
+          // return res.rows[0].register_new_user;
+        } catch (error) {
+          console.error(error);
+          return "SaveHoleDepth: smth error";
+        }
+      },
+
+      SaveMediaToObject: async function (url, media_type, object_type, object_id) {
+
+        var object_table = ""
+
+        switch (object_type) {
+          case 'hole':
+            object_table = "geoapp_holeN"
+            break;
+          
+          case 'depth':
+            object_table = "geoapp_holeD"
+            break;
+          default:
+            object_table = "noTable"
+        }
+
+        if (object_table != "noTable") {
+          var query =  //` select * from save_hole_depth(${hole_id}, ${hole_depth_id},  ${depth_}, '${description_}') `  
+            `insert into "${object_table}_media" 
+            (url, caption, ${object_table}_id, type)
+            values 
+            ('${url}', 'cap1', ${object_id}, '${media_type}') `;
+            
+            console.log(query);
+
+            try {
+              const res = await pool.query(
+                query,
+                []
+              );
+              console.log('SaveMediaToObject_res: ' + res);
+              return res.rows;
+            } catch (error) {
+              console.error(error);
+              return "SaveMediaToObject: smth error";
+            }
+        }
+      },  
   };
