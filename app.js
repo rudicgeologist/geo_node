@@ -14,15 +14,42 @@ app.get('/get_holes', (req, res) => {
   })
 })
 
-app.get('/get_holesD', (req, res) => { 
+app.get('/get_holeDepths', (req, res) => { 
 
   console.log(req.query.hole_id)
 
-  dba.GetHolesD(req.query.hole_id).then(holesD => {
-    console.log(holesD);
-    res.send(holesD)
+  dba.GetHoleDepths(req.query.hole_id, req.query.hole_depth_id).then(holeDepths => {
+    console.log(holeDepths);
+    res.send(holeDepths)
   })
 })
+
+
+app.get('/save_holeDepth', (req, res) => { 
+
+  // console.log(req.query.hole_id)
+
+  dba.SaveHoleDepth(req.query.hole_id, req.query.hole_depth_id, req.query.depth_, req.query.desription_).then(holeDepths => {
+    console.log(holeDepths);
+    res.send(holeDepths)
+  })
+})
+
+app.get('/save_media_to_object', (req, res) => { 
+
+  console.log('save_media_to_object');
+
+  dba.SaveMediaToObject(
+    req.query.url, 
+    req.query.media_type, 
+    req.query.object_type, 
+    req.query.object_id
+  ).then(resSM => {
+    console.log(resSM);
+    res.send(resSM);
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
